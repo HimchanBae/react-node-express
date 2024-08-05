@@ -23,20 +23,19 @@ app.get("/api/likes", (request, response) => {
 
 app.get("/api/likes/:id", (request, response) => {
   const id = request.params.id;
+  const like = data.likes.find((like) => like.id === id);
 
-  data.likes.map((like) => {
-    if (like.id === id) {
-      response.json(like);
-    }
-  });
-
-  response.send("Not found");
+  if (like) {
+    response.json(like);
+  } else {
+    response.status(404).send("Not found");
+  }
 });
 
 app.post("/api/likes", (request, response) => {
   const newLike = request.body;
-  newLike.id = Date.now();
-  newLike.like = 0;
+  newLike.id = Date.now().toString();
+  newLike.likes = 0;
 
   data.likes.push(newLike);
   response.json(newLike);
@@ -46,7 +45,7 @@ app.post("/api/likes/:id", (request, response) => {
   const id = request.params.id;
   let found = false;
 
-  data.likes.map((like) => {
+  data.likes.forEach((like) => {
     if (like.id === id) {
       like.likes += 1;
       found = true;
@@ -55,8 +54,24 @@ app.post("/api/likes/:id", (request, response) => {
     }
   });
   if (!found) {
-    response.send("Not found");
+    response.status(404).send("Not found");
   }
+});
+
+app.delete("/api/likes/:id", (request, response) => {
+  const id = request.params.id;
+  newLikes = [];
+
+  result = { status: "not found" };
+  data.likes.map((like) => {
+    if (like.id === id) {
+      result = { status: "success" };
+    } else {
+      newLikes.push(like);
+    }
+  });
+  data.likes = newLikes;
+  response.json(result);
 });
 
 app.listen(PORT, () => {
