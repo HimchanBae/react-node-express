@@ -23,11 +23,33 @@ app.get("/api/likes", (request, response) => {
 
 app.get("/api/likes/:id", (request, response) => {
   const id = request.params.id;
+
+  data.likes.map((like) => {
+    if (like.id === id) {
+      response.json(like);
+    }
+  });
+
+  response.send("Not found");
+});
+
+app.post("/api/likes", (request, response) => {
+  const newLike = request.body;
+  newLike.id = Date.now();
+  newLike.like = 0;
+
+  data.likes.push(newLike);
+  response.json(newLike);
+});
+
+app.post("/api/likes/:id", (request, response) => {
+  const id = request.params.id;
   let found = false;
 
   data.likes.map((like) => {
     if (like.id === id) {
       like.likes += 1;
+      found = true;
       response.json(like);
       return;
     }
