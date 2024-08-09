@@ -1,4 +1,29 @@
 <h1>{{title}}</h1>
 <p>Welcome to {{title}}</p>
 
-{{sessionid}}
+<fieldset>
+  <form action="/" method="POST">
+    <label>cookievalue</label>
+    <input name="cookievalue" />
+    <input type="submit" , value="send" />
+  </form>
+</fieldset>
+<fieldset>
+  <form action="/userInformation" method="POST">
+    <label>user</label>
+    <input name="user" />
+    <label>value</label>
+    <input name="value" />
+    <input type="submit" , value="send" />
+  </form>
+</fieldset>
+
+{{#if sessionid}}
+  <h1>{{sessionid}}</h1>
+{{else}}
+  <h1>no session id yet</h1>
+{{/if}}
+
+{{#each userInformation}}
+  <p>name: {{user}} value: {{value}}</p>
+{{/each}}
